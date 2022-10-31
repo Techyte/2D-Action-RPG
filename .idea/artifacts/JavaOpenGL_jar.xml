@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="JavaOpenGL:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JavaOpenGL_jar</output-path>
+    <root id="archive" name="JavaOpenGL.jar">
+      <element id="module-output" name="JavaOpenGL" />
+    </root>
+  </artifact>
+</component>
