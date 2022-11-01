@@ -1,6 +1,7 @@
 package object;
 
 import main.GamePanel;
+import utils.UtilityTool;
 import utils.Vector2;
 
 import java.awt.*;
@@ -13,6 +14,8 @@ public class SuperObject {
     public boolean collision = false;
     public Vector2 worldPosition;
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
+
+    UtilityTool uTool = new UtilityTool();
 
     public void draw(Graphics2D g2, GamePanel gp){
 

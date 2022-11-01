@@ -1,12 +1,14 @@
 package entity;
 
 import main.*;
+import utils.UtilityTool;
 import utils.Vector2;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.Buffer;
 
 public class Player extends Entity{
     GamePanel gp;
@@ -22,8 +24,7 @@ public class Player extends Entity{
         this.gp = gp;
         this.keyHandler = keyHandler;
 
-        screenPosition.x = gp.screenWidth/2-(gp.tileSize/2);
-        screenPosition.y = gp.screenHeight/2-(gp.tileSize/2);
+        screenPosition = new Vector2(gp.screenWidth/2-(gp.tileSize/2), gp.screenHeight/2-(gp.tileSize/2));
 
         solidArea = new Rectangle(7*gp.scale, 12*gp.scale, 2*gp.scale, 3*gp.scale);
 
@@ -39,19 +40,27 @@ public class Player extends Entity{
     }
 
     public void GetPlayerImage(){
-        try{
-            up1 = ImageIO.read(getClass().getResourceAsStream("/Walking sprites/boy_up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/Walking sprites/boy_up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/Walking sprites/boy_down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/Walking sprites/boy_down_2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/Walking sprites/boy_left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/Walking sprites/boy_left_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/Walking sprites/boy_right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/Walking sprites/boy_right_2.png"));
-            debug_white = ImageIO.read(getClass().getResourceAsStream("/debug_white.png"));
+        up1 = setup("boy_up_1");
+        up2 = setup("boy_up_2");
+        down1 = setup("boy_down_1");
+        down2 = setup("boy_down_2");
+        left1 = setup("boy_left_1");
+        left2 = setup("boy_left_2");
+        right1 = setup("boy_right_1");
+        right2 = setup("boy_right_2");
+    }
+
+    public BufferedImage setup(String imageName){
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream("/assets/Walking sprites/" + imageName + ".png"));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
         }catch (IOException e){
             e.printStackTrace();
         }
+        return image;
     }
 
     public void Update(){
@@ -87,7 +96,7 @@ public class Player extends Entity{
             position.Add(new Vector2(direction.x * speed * GamePanel.deltaTime, direction.y * speed * GamePanel.deltaTime));
 
             // Handle player sprite animating
-            if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed) {
+            if(direction.x != 0 || direction.y != 0) {
                 spriteCounter++;
                 if(spriteCounter > 10){
                     if(spriteNum == 1){
@@ -105,7 +114,7 @@ public class Player extends Entity{
 
     public void pickUpObject(int index){
 
-        if(index != 999){
+        if(index != -1){
 
             String objectName = gp.AssetSetter.objects[index].name;
 
@@ -179,6 +188,6 @@ public class Player extends Entity{
                 break;
         }
 
-        g2.drawImage(image, (int)screenPosition.x, (int)screenPosition.y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, (int)screenPosition.x, (int)screenPosition.y, null);
     }
 }

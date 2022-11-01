@@ -16,8 +16,8 @@ public class Vector2 {
     public static Vector2 negativeInfinity = new Vector2(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
 
     public Vector2() {
-        this.x = 0f;
-        this.y = 0f;
+        this.y = 0;
+        this.x = 0;
     }
 
     public Vector2(float x, float y){

@@ -3,6 +3,7 @@ package main;
 import entity.*;
 import object.SuperObject;
 import tile.TileManager;
+import utils.Vector2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +26,8 @@ public class GamePanel extends JPanel implements Runnable{
 
     // FPS
     int FPS = 60;
+
+    boolean musicOn = true;
 
     TileManager tileManager = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler();
@@ -90,6 +93,34 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
+    public Vector2 convertToWorldPos(Vector2 screenPos){
+        return new Vector2(screenPos.x * tileSize, screenPos.y * tileSize);
+    }
+
+    public Vector2 convertToWorldPos(float x, float y){
+        return new Vector2(x * tileSize, y * tileSize);
+    }
+
+    public Vector2 convertToScreenPos(Vector2 worldPos){
+        return new Vector2(worldPos.x - player.position.x + player.screenPosition.x, worldPos.y - player.position.y + player.screenPosition.y);
+    }
+
+    public Vector2 convertToTileCord(Vector2 pixelPos){
+        return new Vector2(pixelPos.x * tileSize, pixelPos.y * tileSize);
+    }
+
+    public boolean isInsideScreenBounds(Vector2 pos){
+
+        if(pos.x + tileSize > (int)player.position.x - player.screenPosition.x &&
+                pos.x - tileSize < (int)player.position.x + player.screenPosition.x &&
+                pos.y + tileSize > (int)player.position.y - player.screenPosition.y &&
+                pos.y - tileSize < (int)player.position.y + player.screenPosition.y){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public void update(){
         player.Update();
     }
@@ -98,9 +129,6 @@ public class GamePanel extends JPanel implements Runnable{
 
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-
-        // DEBUG
-        long drawStart = System.nanoTime();
 
         // TILE
         tileManager.draw(g2);
@@ -117,26 +145,30 @@ public class GamePanel extends JPanel implements Runnable{
 
         ui.draw(g2);
 
-        System.out.println(System.nanoTime() - drawStart);
-
         g2.dispose();
     }
 
     public void playMusic(int i){
 
-        music.setFile(i);
-        music.play();
-        music.loop();
+        if(musicOn) {
+            music.setFile(i);
+            music.play();
+            music.loop();
+        }
     }
 
     public void stopMusic(){
 
-        music.stop();
+        if(musicOn) {
+            music.stop();
+        }
     }
 
     public void playSE(int i){
 
-        se.setFile(i);
-        se.play();
+        if(musicOn) {
+            se.setFile(i);
+            se.play();
+        }
     }
 }

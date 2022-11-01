@@ -73,21 +73,22 @@ public class CollisionChecker {
 
     public int CheckObject(Entity entity, Vector2 direction, boolean player){
 
-        int index = 999;
+        int index = -1;
 
         for (int i = 0; i < gp.AssetSetter.objects.length; i++){
 
             if(gp.AssetSetter.objects[i] != null) {
 
-                Rectangle entitySolidArea = new Rectangle(0, 0, 48, 48);
+                Rectangle entitySolidArea = new Rectangle(entity.solidArea.x, entity.solidArea.y, entity.solidArea.width, entity.solidArea.height);
                 Rectangle objectSolidArea = new Rectangle(0, 0, gp.AssetSetter.objects[i].solidArea.width, gp.AssetSetter.objects[i].solidArea.height);
 
                 entitySolidArea.x += entity.position.x;
                 entitySolidArea.y += entity.position.y;
-
+                
                 objectSolidArea.x = (int) gp.AssetSetter.objects[i].worldPosition.x + gp.AssetSetter.objects[i].solidArea.x;
                 objectSolidArea.y = (int) gp.AssetSetter.objects[i].worldPosition.y + gp.AssetSetter.objects[i].solidArea.y;
 
+                // up
                 if(direction.y < 0){
                     entitySolidArea.y -= entity.speed;
                     if (entitySolidArea.intersects(objectSolidArea)) {
@@ -100,6 +101,7 @@ public class CollisionChecker {
                     }
                 }
 
+                // down
                 if(direction.y > 0){
                     entitySolidArea.y += entity.speed;
                     if (entitySolidArea.intersects(objectSolidArea)) {
@@ -112,6 +114,10 @@ public class CollisionChecker {
                     }
                 }
 
+                entitySolidArea.y = entity.solidArea.y;
+                entitySolidArea.y += entity.position.y;
+
+                // left
                 if(direction.x < 0){
                     entitySolidArea.x -= entity.speed;
                     if (entitySolidArea.intersects(objectSolidArea)) {
@@ -124,6 +130,7 @@ public class CollisionChecker {
                     }
                 }
 
+                // right
                 if(direction.x > 0){
                     entitySolidArea.x += entity.speed;
                     if (entitySolidArea.intersects(objectSolidArea)) {
